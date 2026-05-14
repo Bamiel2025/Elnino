@@ -61,9 +61,13 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
         {/* High-End Background: Two separate images with cross-fade */}
         <div className="absolute inset-0 z-0 bg-[#020617]">
            <AnimatePresence mode="wait">
+             {/*
+               IMPORTANT: These paths expect the 'simulationelnino' folder to be present in the 'public' directory.
+               If you haven't uploaded it yet, please do so for the animations to work.
+             */}
              <motion.img 
                key={phase}
-               src={phase === 'normal' ? "/image/situation normale.jpg" : "/image/situation elnino.jpg"}
+               src={phase === 'normal' ? "/simulationelnino/situation_normale_anim.gif" : "/simulationelnino/situation_elnino_anim.gif"}
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
@@ -71,6 +75,11 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
                alt={`Situation ${phase}`}
                className="w-full h-full object-cover"
                style={{ imageRendering: 'high-quality' }}
+               onError={(e) => {
+                 // Fallback to original images if animation folder is not yet present
+                 const target = e.target as HTMLImageElement;
+                 target.src = phase === 'normal' ? "/image/situation normale.jpg" : "/image/situation elnino.jpg";
+               }}
              />
            </AnimatePresence>
            
