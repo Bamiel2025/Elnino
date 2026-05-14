@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, AlertTriangle, Fish, Target, Info, Map as MapIcon, ChevronRight, Globe, Maximize } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Fish, Target, Info, Map as MapIcon, ChevronRight, Globe, Maximize, X } from 'lucide-react';
 import { WORLD_EVENTS, ClimatePhase } from '../types';
 import { useState, useRef } from 'react';
 
@@ -10,6 +10,7 @@ interface WorldMapActivityProps {
 
 export default function WorldMapActivity({ phase, isTeacherMode }: WorldMapActivityProps) {
   const [placedEvents, setPlacedEvents] = useState<string[]>([]);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isElNino = phase === 'elnino';
 
@@ -83,11 +84,21 @@ export default function WorldMapActivity({ phase, isTeacherMode }: WorldMapActiv
             <Maximize size={20} />
          </button>
         {/* Real World Map Image with Zoom Effect */}
+        {/*
+          IMPORTANT: This path expects the 'carteconsequences' folder to be present in the 'public' directory.
+          The file name inside the folder is assumed to be 'carte_globale.jpg'.
+          If you haven't uploaded it yet, please do so for the new map to work.
+        */}
         <motion.img 
-          src="/image/carte consequences mondiales elnino.jpg" 
+          src="/carteconsequences/carte_globale.jpg"
           alt="World Map Impacts" 
           className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover/map:scale-[1.02] transition-transform duration-[2000ms] ease-out"
           style={{ imageRendering: 'high-quality' }}
+          onError={(e) => {
+            // Fallback to original image if folder is not yet present
+            const target = e.target as HTMLImageElement;
+            target.src = "/image/carte consequences mondiales elnino.jpg";
+          }}
         />
 
         {/* Dynamic Atmospheric Glow (Waves from Pacific) */}
@@ -140,7 +151,10 @@ export default function WorldMapActivity({ phase, isTeacherMode }: WorldMapActiv
                     className={`mt-4 ${event.image ? 'p-2' : 'px-4 py-2'} bg-slate-900 border-2 border-emerald-500 rounded-xl text-[10px] font-black text-emerald-400 uppercase tracking-widest whitespace-nowrap shadow-[0_0_40px_rgba(0,0,0,0.8)] z-[60] backdrop-blur-md`}
                   >
                     {event.image ? (
-                      <div className="relative">
+                      <div
+                        className="relative cursor-zoom-in"
+                        onClick={() => setZoomedImage(event.image || null)}
+                      >
                         <img src={encodeURI(event.image)} alt={event.label} className="w-56 h-36 object-cover rounded-lg shadow-md border border-slate-700" />
                         <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent rounded-b-lg">
                            <span className="text-xs text-white drop-shadow-md">{event.label}</span>
@@ -190,7 +204,10 @@ export default function WorldMapActivity({ phase, isTeacherMode }: WorldMapActiv
                   className="p-3 bg-slate-800/80 border border-slate-700 rounded-2xl cursor-grab active:cursor-grabbing hover:border-blue-500/50 transition-all shadow-xl group flex flex-col gap-2 w-[220px]"
                 >
                   {event.image ? (
-                    <div className="relative w-full h-32 rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-blue-500/30 transition-all">
+                    <div
+                      className="relative w-full h-32 rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-blue-500/30 transition-all cursor-zoom-in"
+                      onClick={() => setZoomedImage(event.image || null)}
+                    >
                        <img src={encodeURI(event.image)} alt={event.label} className="w-full h-full object-cover" />
                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-3">
                           <span className="text-xs font-bold text-white leading-tight shadow-black">{event.label}</span>
@@ -251,6 +268,35 @@ export default function WorldMapActivity({ phase, isTeacherMode }: WorldMapActiv
            </div>
         </aside>
       </div>
+
+      {/* Image Zoom Modal */}
+      <AnimatePresence>
+        {zoomedImage && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-10">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setZoomedImage(null)}
+              className="absolute inset-0 bg-slate-950/95 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative max-w-5xl w-full aspect-video bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-800 shadow-2xl"
+            >
+              <img src={encodeURI(zoomedImage)} alt="Zoomed consequence" className="w-full h-full object-contain" />
+              <button
+                onClick={() => setZoomedImage(null)}
+                className="absolute top-6 right-6 p-4 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/10 rounded-full text-white transition-all shadow-2xl active:scale-95"
+              >
+                <X size={24} />
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
