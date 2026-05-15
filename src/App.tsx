@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Activity, Globe, Info, ArrowRight, Layers, Waves, Wind, CheckCircle2, Menu } from 'lucide-react';
+import { Globe, ArrowRight, Layers, CheckCircle2 } from 'lucide-react';
 import Introduction from './components/Introduction';
 import Conclusion from './components/Conclusion';
 import ONIActivity from './components/ONIActivity';
@@ -147,70 +147,16 @@ export default function App() {
             
             {currentStage === 'simulation' && (
               <div className="flex flex-col gap-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    <div className="lg:col-span-3">
-                      <PacificView phase={phase} intensity={intensity} isTeacherMode={isTeacherMode} />
-                    </div>
-                    
-                    <aside className="flex flex-col gap-6">
-                      <div className="glass-panel p-8 bg-gradient-to-br from-slate-900 to-slate-950 border-slate-800 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                           <Info size={120} />
-                        </div>
-                        <h2 className="text-2xl font-display font-extrabold mb-6 flex items-center gap-3 text-white">
-                           <div className="w-1.5 h-8 bg-blue-500 rounded-full" />
-                           {explanation.title}
-                        </h2>
-                        <p className="text-slate-400 text-sm leading-relaxed mb-8">
-                          {explanation.text}
-                        </p>
-                        
-                        <div className="flex flex-col gap-4">
-                           <div className="flex flex-col gap-3">
-                              <label className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em]">Sélecteur de phase</label>
-                              <div className="flex p-1 bg-slate-950 rounded-2xl border border-slate-800">
-                                <button 
-                                  onClick={() => handlePhaseChange('normal')}
-                                  className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${phase === 'normal' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-slate-500 hover:text-slate-300'}`}
-                                >
-                                  Normal
-                                </button>
-                                <button 
-                                  onClick={() => handlePhaseChange('elnino')}
-                                  className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${phase === 'elnino' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'text-slate-500 hover:text-slate-300'}`}
-                                >
-                                  El Niño
-                                </button>
-                              </div>
-                           </div>
-
-                           <div className="flex flex-col gap-3">
-                              <label className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em]">Force du phénomène</label>
-                              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center gap-4">
-                                <input 
-                                  type="range" 
-                                  min="0" 
-                                  max="1" 
-                                  step="0.01" 
-                                  value={intensity}
-                                  onChange={(e) => handleIntensityChange(parseFloat(e.target.value))}
-                                  className="flex-1 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                />
-                                <span className="text-xs font-mono font-black text-blue-400 w-8">{Math.round(intensity * 100)}%</span>
-                              </div>
-                           </div>
-                        </div>
-
-                        <button 
-                          onClick={() => setCurrentStage('map')}
-                          className="w-full mt-8 py-5 bg-white text-slate-950 font-display font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-blue-500 hover:text-white transition-all group active:scale-95 shadow-xl shadow-white/5"
-                        >
-                          Étape suivante
-                          <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
-                        </button>
-                      </div>
-                    </aside>
-                  </div>
+                <PacificView phase={phase} intensity={intensity} isTeacherMode={isTeacherMode} />
+                <div className="flex justify-end">
+                  <button 
+                    onClick={() => setCurrentStage('map')}
+                    className="group flex items-center gap-4 bg-white text-slate-950 px-10 py-5 rounded-2xl font-display font-black text-xl hover:bg-blue-500 hover:text-white transition-all shadow-2xl active:scale-95"
+                  >
+                    Voir les impacts mondiaux
+                    <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                  </button>
+                </div>
               </div>
             )}
 
