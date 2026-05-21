@@ -32,11 +32,15 @@ export interface EventMarker {
 
 export const SIMULATION_LABELS: SimulationLabel[] = [
   { id: 'alizes-forts', text: 'Alizés Forts', targetZoneId: 'winds' },
-  { id: 'alizes-faibles', text: 'Alizés Faibles', targetZoneId: 'winds' },
-  { id: 'upwelling-ok', text: 'Upwelling (Riche)', targetZoneId: 'upwelling' },
-  { id: 'upwelling-stop', text: 'Upwelling (Stoppé)', targetZoneId: 'upwelling' },
-  { id: 'rain-asia', text: 'Pluies Tropicales', targetZoneId: 'rain' },
-  { id: 'rain-center', text: 'Pluies Déplacées', targetZoneId: 'rain' }
+  { id: 'alizes-faibles', text: 'Alizés Affaiblis', targetZoneId: 'winds' },
+  { id: 'upwelling-ok', text: 'Upwelling Actif', targetZoneId: 'upwelling' },
+  { id: 'upwelling-stop', text: 'Upwelling Stoppé', targetZoneId: 'upwelling' },
+  { id: 'rain-asia', text: 'Convection en Asie', targetZoneId: 'rain' },
+  { id: 'rain-center', text: 'Convection Déplacée', targetZoneId: 'rain' },
+  { id: 'thermocline-inclinee', text: 'Thermocline Inclinée', targetZoneId: 'thermocline' },
+  { id: 'thermocline-aplatie', text: 'Thermocline Aplatie', targetZoneId: 'thermocline' },
+  { id: 'sst-cold-east', text: 'Eaux Froides à l\'Est', targetZoneId: 'sst' },
+  { id: 'sst-warm-east', text: 'Eaux Chaudes à l\'Est', targetZoneId: 'sst' }
 ];
 
 export const WORLD_EVENTS: EventMarker[] = [

@@ -42,6 +42,11 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
     }
   }, [phase]);
 
+  // Reset placed labels when active simulation mode changes
+  useEffect(() => {
+    setPlacedLabels({});
+  }, [activeId]);
+
   // Animation ticker
   useEffect(() => {
     const tick = (ts: number) => {
@@ -71,14 +76,19 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
   const accent = ACCENT[activeId];
 
   const dropZones = [
-    { id: 'winds', x: '50%', y: '35%', label: 'Circulation des Alizés' },
-    { id: 'upwelling', x: '92%', y: '75%', label: 'Zone de Nutriments' },
-    { id: 'rain', x: phase === 'normal' ? '15%' : '55%', y: '15%', label: 'Convection Tropicale' },
+    { id: 'winds', x: '50%', y: '28%', label: 'Circulation des Alizés' },
+    { id: 'upwelling', x: '88%', y: '70%', label: 'Zone d\'Upwelling' },
+    { id: 'rain', x: activeId === 'elnino' ? '58%' : '18%', y: '15%', label: 'Convection Atmosphérique' },
+    { id: 'thermocline', x: '68%', y: '88%', label: 'État de la Thermocline' },
+    { id: 'sst', x: activeId === 'elnino' ? '74%' : '84%', y: '46%', label: 'Température de Surface' },
   ];
 
   const currentLabels = SIMULATION_LABELS.filter(l => {
-    if (phase === 'normal') return ['alizes-forts', 'upwelling-ok', 'rain-asia'].includes(l.id);
-    else return ['alizes-faibles', 'upwelling-stop', 'rain-center'].includes(l.id);
+    if (activeId === 'elnino') {
+      return ['alizes-faibles', 'upwelling-stop', 'rain-center', 'thermocline-aplatie', 'sst-warm-east'].includes(l.id);
+    } else {
+      return ['alizes-forts', 'upwelling-ok', 'rain-asia', 'thermocline-inclinee', 'sst-cold-east'].includes(l.id);
+    }
   });
 
   const handleDragEnd = (labelId: string, event: any, info: any) => {

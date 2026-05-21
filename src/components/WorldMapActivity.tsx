@@ -31,50 +31,62 @@ const ELNINO_CONSEQUENCES: Consequence[] = [
   {
     id: 'floods',
     title: 'Inondations',
-    titleFr: 'Inondations au Pérou',
-    description: 'El Niño réchauffe les eaux côtières péruviennes, provoquant une évaporation intense et des pluies diluviennes sur des terres désertiques. Cela engendre des coulées de boue dévastatrices (huaicos) et des crues de rivières historiques.',
+    titleFr: 'Inondations & pluies extrêmes au Pérou/Équateur',
+    description: 'El Niño réchauffe de manière spectaculaire les eaux du Pacifique Est. Cela déclenche une évaporation intense et des précipitations diluviennes dévastatrices sur les côtes normalement arides du Pérou et de l\'Équateur (provoquant coulées de boue et crues historiques).',
     icon: '🌊',
     color: '#3b82f6', // blue
     image: '/image/inondations au perou.jpg',
-    position: [-9.19, -75.015],
+    position: [-2.0, -79.5],
     region: 'Amérique du Sud',
-    elninoLink: 'Eaux océaniques plus chaudes à l\'Est → évaporation accrue → convection atmosphérique massive → pluies torrentielles sur les côtes péruviennes.'
+    elninoLink: 'Eaux côtières anormalement chaudes → forte évaporation → convection intense localisée → précipitations torrentielles.'
   },
   {
     id: 'drought',
     title: 'Sécheresse',
-    titleFr: 'Sécheresse en Australie',
-    description: "Le déplacement de la convection atmosphérique vers le centre du Pacifique prive l'Est de l'Australie de ses nuages pluvieux réguliers. Les sols s'assèchent dramatiquement, pénalisant l'élevage et l'agriculture.",
+    titleFr: 'Sécheresse sévère en Australie',
+    description: 'En déplaçant la zone d\'ascendance humide vers le centre du Pacifique, El Niño prive l\'Est de l\'Australie de ses pluies régulières. Cela assèche drastiquement les sols, nuit gravement aux cultures et aggrave les risques d\'incendies de brousse.',
     icon: '☀️',
     color: '#f59e0b', // amber
     image: '/image/secheresse en australie.jpg',
-    position: [-25.27, 133.77],
+    position: [-22.5, 133.5],
     region: 'Océanie',
-    elninoLink: "Affaiblissement des alizés → absence d'ascendance d'air humide sur le continent australien → anticyclone persistant et temps aride."
+    elninoLink: 'Zone humide déplacée vers l\'Est → zone de subsidence (air sec descendant) persistante au-dessus du continent australien.'
   },
   {
     id: 'fishing',
-    title: 'Crise de la Pêche',
-    titleFr: 'Crise de la Pêche au Pérou',
-    description: "L'arrivée des eaux chaudes tropicales approfondit la thermocline et bloque l'upwelling côtier. Sans les nutriments des eaux froides profondes, le phytoplancton disparaît, affamant les bancs de poissons (anchois) qui fuient.",
+    title: 'Effondrement de la Pêche',
+    titleFr: 'Effondrement des pêcheries péruviennes',
+    description: 'La disparition des alizés et le réchauffement des eaux côtières bloquent le pompage d\'eau froide de l\'upwelling. Privées de nutriments profonds, les algues meurent, entraînant la fuite ou la mort des bancs d\'anchois et plongeant l\'économie locale dans une crise majeure.',
     icon: '🐟',
     color: '#06b6d4', // cyan
     image: '/image/crise de la peche.jpg',
-    position: [-15.5, -80.2],
+    position: [-12.0, -78.5],
     region: 'Pacifique Sud-Est',
-    elninoLink: "Thermocline aplatie → l'upwelling ne pompe plus que de l'eau chaude et pauvre en sels minéraux → effondrement de la chaîne alimentaire marine."
+    elninoLink: 'Thermocline abaissée → arrêt du transport vertical d\'eau froide riche en nutriments → effondrement de la chaîne trophique marine.'
   },
   {
     id: 'fires',
-    title: 'Incendies',
-    titleFr: 'Incendies en Indonésie',
-    description: "L'Indonésie subit une sécheresse extrême similaire à l'Australie. Les forêts primaires et surtout les tourbières asséchées s'enflamment facilement, dégageant un brouillard toxique géant (haze) qui paralyse le transport et l'économie locale.",
+    title: 'Incendies & Sécheresse',
+    titleFr: 'Incendies & Sécheresse en Indonésie',
+    description: 'Les conditions anticycloniques persistantes au-dessus de l\'Asie du Sud-Est coupent la mousson humide. L\'Indonésie subit alors une sécheresse extrême, rendant ses forêts primaires et tourbières très inflammables, générant un brouillard toxique géant.',
     icon: '🔥',
     color: '#ef4444', // red
     image: '/image/incendies en indonésie.jpg',
-    position: [-0.79, 113.92],
+    position: [-1.0, 115.0],
     region: 'Asie du Sud-Est',
-    elninoLink: "Inversion de la cellule de Walker → subsidence d'air sec au-dessus de l'Asie du Sud-Est → sécheresse prononcée propice aux méga-feux."
+    elninoLink: 'Déplacement de la cellule de Walker → sécheresse extrême → accumulation de matière sèche propice aux incendies incontrôlables.'
+  },
+  {
+    id: 'teleconnections',
+    title: 'Téléconnexions',
+    titleFr: 'Perturbation météo mondiale (Téléconnexions)',
+    description: 'La modification de la convection équatoriale modifie la trajectoire des courants-jets à haute altitude (Jet Streams). Par effet domino, El Niño provoque des hivers anormalement doux au Canada, des tempêtes répétées en Californie, et des sécheresses intenses en Afrique australe.',
+    icon: '🌀',
+    color: '#a855f7', // purple
+    image: '/image/carte consequences mondiales elnino.jpg',
+    position: [34.05, -118.24],
+    region: 'Global',
+    elninoLink: 'Changement de circulation de la haute atmosphère → déviation des trajectoires de tempêtes et anomalies climatiques à l\'échelle planétaire.'
   }
 ];
 
@@ -87,7 +99,7 @@ const NORMAL_CONSEQUENCES: Consequence[] = [
     icon: '🐟',
     color: '#10b981', // emerald
     image: '/image/fishing.jpg',
-    position: [-15.5, -80.2],
+    position: [-12.0, -78.5],
     region: 'Pacifique Sud-Est',
     elninoLink: 'Alizés soutenus d\'Est en Ouest → transport d\'Ekman repoussant l\'eau côtière → remontée d\'eau profonde froide et nutritive → abondance de poissons.'
   },
@@ -99,7 +111,7 @@ const NORMAL_CONSEQUENCES: Consequence[] = [
     icon: '🌧️',
     color: '#3b82f6', // blue
     image: '/image/floods.jpg',
-    position: [-0.79, 113.92],
+    position: [-1.0, 115.0],
     region: 'Asie du Sud-Est',
     elninoLink: 'Piscine d\'eau chaude (>28°C) à l\'Ouest → forte ascendance de l\'air chaud humide → convection vigoureuse → pluies bienfaisantes de mousson.'
   },
@@ -111,23 +123,24 @@ const NORMAL_CONSEQUENCES: Consequence[] = [
     icon: '🌵',
     color: '#6b7280', // gray
     image: '/image/drought.jpg',
-    position: [-9.19, -75.015],
+    position: [-2.0, -79.5],
     region: 'Amérique du Sud',
     elninoLink: 'Eau de surface froide → refroidissement de l\'air inférieur → inversion thermique → stabilité verticale → absence totale de précipitations.'
   }
 ];
 
 const ELNINO_STARTS: Record<string, [number, number]> = {
-  floods: [0, -110],
-  drought: [0, -135],
-  fishing: [0, -160],
-  fires: [0, 165]
+  floods: [5, -115],
+  drought: [5, -130],
+  fishing: [5, -145],
+  fires: [5, -160],
+  teleconnections: [5, -175]
 };
 
 const NORMAL_STARTS: Record<string, [number, number]> = {
-  'normal-fishing': [0, -115],
-  'normal-rain': [0, -145],
-  'normal-dry': [0, 160]
+  'normal-fishing': [5, -120],
+  'normal-rain': [5, -145],
+  'normal-dry': [5, -170]
 };
 
 function createCustomIcon(emoji: string, color: string, selected: boolean, isPlaced: boolean) {
