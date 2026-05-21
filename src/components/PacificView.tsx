@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, Target, Waves, Maximize, EyeOff } from 'lucide-react';
+import { CheckCircle2, Target, Waves, Maximize, Eye, X, ZoomIn } from 'lucide-react';
 import { ClimatePhase, SIMULATION_LABELS } from '../types';
 import { OceanSimulator } from '../simulation/OceanSimulator';
 import { ModeSelector } from '../simulation/ModeSelector';
@@ -8,6 +8,7 @@ import { InfoPanel } from '../simulation/InfoPanel';
 import { Legend } from '../simulation/Legend';
 import { StatsBar } from '../simulation/StatsBar';
 import { MODES, ModeConfig, ClimateMode } from '../simulation/types';
+import { QuizSection } from './QuizSection';
 
 interface PacificViewProps {
   phase: ClimatePhase;
@@ -189,48 +190,71 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
       </div>
 
       {/* ── Label Drop Activity ───────────────────────────────────── */}
-      <div ref={containerRef} className="relative w-full aspect-[21/9] bg-[#020617] rounded-[2.5rem] overflow-hidden border border-slate-800 shadow-[0_0_80px_rgba(0,0,0,0.6)]">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-slate-600 text-xs font-mono">
-            <div className="text-4xl mb-2">🗺️</div>
-            <div>Zone de dépôt des étiquettes</div>
-            <div className="text-slate-700 mt-1">Phase : {phase === 'normal' ? 'Normale' : 'El Niño'}</div>
-          </div>
+      <div ref={containerRef} className="relative w-full aspect-[21/9] bg-slate-950 rounded-[2.5rem] overflow-hidden border border-slate-800 shadow-[0_0_80px_rgba(0,0,0,0.6)]">
+        {/* Render the live OceanSimulator inside the drop zone container as the background! */}
+        <div className="absolute inset-0 w-full h-full opacity-65 pointer-events-none z-10 flex items-center justify-center">
+          <OceanSimulator mode={activeMode} prevMode={prevMode} animTick={animTick} />
         </div>
+
+        {/* Dark overlay to increase contrast of UI elements */}
+        <div className="absolute inset-0 bg-slate-950/20 pointer-events-none z-20" />
+
+        {/* Help button */}
+        <button
+          onClick={() => setShowRefImage(true)}
+          className="absolute top-8 right-24 z-50 px-4 py-2.5 bg-slate-900/80 hover:bg-slate-900/100 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-2xl text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-2xl active:scale-95 flex items-center gap-2 cursor-pointer"
+          title="Schéma de référence"
+        >
+          <Eye size={16} className="text-blue-400" />
+          Aide : Schéma
+        </button>
 
         {/* Fullscreen */}
         <button
           onClick={() => { if (!containerRef.current) return; !document.fullscreenElement ? containerRef.current.requestFullscreen() : document.exitFullscreen(); }}
-          className="absolute top-8 right-8 z-50 p-3 bg-black/40 hover:bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl text-white/60 hover:text-white transition-all shadow-2xl active:scale-95"
+          className="absolute top-8 right-8 z-50 p-2.5 bg-slate-900/80 hover:bg-slate-900/100 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-2xl text-white/60 hover:text-white transition-all shadow-2xl active:scale-95 cursor-pointer"
           title="Plein écran"
         >
-          <Maximize size={20} />
+          <Maximize size={18} />
         </button>
 
         {/* Drop zones */}
         {dropZones.map(zone => (
           <div key={zone.id} style={{ left: zone.x, top: zone.y }}
-            className={`absolute -translate-x-1/2 -translate-y-1/2 w-40 h-20 rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all duration-500 z-30 ${placedLabels[zone.id] ? 'border-emerald-500 bg-emerald-500/10 shadow-[0_0_40px_rgba(16,185,129,0.3)]' : 'border-white/10 bg-white/5 backdrop-blur-[4px] hover:border-white/30 hover:bg-white/10'}`}>
+            className={`absolute -translate-x-1/2 -translate-y-1/2 w-44 h-22 rounded-[2rem] border-2 border-dashed flex flex-col items-center justify-center transition-all duration-500 z-30 ${placedLabels[zone.id] ? 'border-emerald-500 bg-slate-950/80 shadow-[0_0_40px_rgba(16,185,129,0.4)]' : 'border-white/20 bg-slate-950/50 backdrop-blur-[4px] hover:border-white/40 hover:bg-slate-950/70'}`}>
             {placedLabels[zone.id] ? (
               <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl shadow-[0_0_30px_rgba(16,185,129,0.8)] border border-emerald-400">
-                <CheckCircle2 size={20} className="text-white drop-shadow" />
-                <span className="text-sm font-display font-black text-white uppercase tracking-wider leading-none drop-shadow">{placedLabels[zone.id]}</span>
+                <CheckCircle2 size={18} className="text-white drop-shadow" />
+                <span className="text-xs font-display font-black text-white uppercase tracking-wider leading-none drop-shadow">{placedLabels[zone.id]}</span>
               </motion.div>
             ) : (
-              <div className="flex flex-col items-center opacity-40"><Target size={24} className="text-white" /></div>
+              <div className="flex flex-col items-center gap-1.5 opacity-60">
+                <Target size={20} className="text-slate-400 animate-pulse" />
+                <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500 font-bold">{zone.label}</span>
+              </div>
             )}
           </div>
         ))}
 
-        {/* Reference modal */}
+        {/* Reference modal with lightbox zoom */}
         <AnimatePresence>
           {showRefImage && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 z-[100] bg-black/80 backdrop-blur-md p-12 flex items-center justify-center">
-              <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="relative max-w-4xl w-full">
-                <img src="/image/situation normale versus elnino.jpg" alt="Reference" className="w-full h-auto rounded-[2rem] shadow-2xl border border-white/20" />
-                <button onClick={() => setShowRefImage(false)} className="absolute -top-6 -right-6 p-4 bg-white text-slate-950 rounded-full hover:bg-blue-400 hover:text-white transition-all shadow-2xl">
-                  <EyeOff size={24} />
+              className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md p-8 flex items-center justify-center cursor-zoom-out"
+              onClick={() => setShowRefImage(false)}>
+              <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.85, opacity: 0 }}
+                className="relative max-w-4xl max-h-[85vh] w-full flex flex-col items-center cursor-default" onClick={e => e.stopPropagation()}>
+                <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 bg-slate-900">
+                  <img src="/image/situation normale versus elnino.jpg" alt="Schémas comparatifs El Niño vs Normal" className="w-full h-auto max-h-[75vh] object-contain" />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-6 text-center">
+                    <h4 className="text-lg font-display font-extrabold text-white uppercase tracking-wider">
+                      Schéma Pédagogique de Référence - Normal vs El Niño
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-1">Utilisez ces schémas pour localiser et comprendre les processus physiques.</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowRefImage(false)} className="absolute -top-4 -right-4 p-3 bg-white text-slate-950 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-2xl cursor-pointer">
+                  <X size={20} />
                 </button>
               </motion.div>
             </motion.div>
@@ -239,50 +263,53 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
       </div>
 
       {/* ── Label drag deck ───────────────────────────────────────── */}
-      <div className="glass-panel p-10 bg-gradient-to-r from-slate-900/60 to-slate-950/60 border-slate-800 flex flex-col gap-8 relative z-[60]">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-display font-extrabold text-white flex items-center gap-3">
-              <Waves className="text-blue-500" />
+      <div className="glass-panel p-8 bg-gradient-to-r from-slate-900/60 to-slate-950/60 border border-slate-800 rounded-3xl flex flex-col gap-6 relative z-[40]">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex flex-col gap-1.5">
+            <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
+              <Waves className="text-blue-500 animate-pulse" size={20} />
               Étiquettes à placer
             </h3>
-            <p className="text-slate-400 text-sm">Glisse les étiquettes dans les zones correspondantes du schéma ci-dessus.</p>
+            <p className="text-slate-400 text-xs">Faites glisser les étiquettes dans les zones correspondantes sur l'animation en direct ci-dessus.</p>
           </div>
           {isTeacherMode && (
             <button
               onClick={() => { const sol: Record<string, string> = {}; currentLabels.forEach(l => { sol[l.targetZoneId] = l.text; }); setPlacedLabels(sol); }}
-              className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 active:scale-95">
+              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 active:scale-95 cursor-pointer">
               Résoudre Automatiquement
             </button>
           )}
         </div>
 
-        <div className="flex flex-wrap gap-5 min-h-[80px] items-center">
+        <div className="flex flex-wrap gap-4 min-h-[60px] items-center">
           {currentLabels.filter(l => !Object.values(placedLabels).includes(l.text)).map(label => (
             <motion.div key={label.id} drag dragConstraints={containerRef}
               onDragEnd={(e, info) => handleDragEnd(label.id, e, info)}
               whileDrag={{ scale: 1.1, zIndex: 9999 }} style={{ zIndex: 100 }}
-              className="px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl cursor-grab active:cursor-grabbing transition-all flex items-center gap-4 shadow-xl group relative z-[100]">
-              <div className="p-2 bg-blue-500 rounded-xl text-white group-hover:bg-blue-400 transition-colors"><Target size={18} /></div>
-              <span className="text-sm font-display font-black text-slate-200 uppercase tracking-wider">{label.text}</span>
+              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-500 rounded-xl cursor-grab active:cursor-grabbing transition-all flex items-center gap-3 shadow-xl group relative z-[50]">
+              <div className="p-1.5 bg-blue-500 rounded-lg text-white group-hover:bg-blue-400 transition-colors"><Target size={14} /></div>
+              <span className="text-xs font-display font-black text-slate-200 uppercase tracking-wider">{label.text}</span>
             </motion.div>
           ))}
 
           {currentLabels.length === Object.keys(placedLabels).length && currentLabels.length > 0 && (
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-              className="flex-1 flex items-center gap-6 p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-3xl shadow-inner">
-              <div className="p-3 bg-emerald-500 rounded-2xl text-white shadow-lg shadow-emerald-500/40"><CheckCircle2 size={32} /></div>
-              <div className="flex flex-col gap-1">
-                <span className="text-lg font-display font-black text-emerald-400 uppercase tracking-tighter">Diagnostic Validé</span>
-                <span className="text-xs text-slate-400 font-medium">Tous les paramètres sont identifiés.</span>
+              className="flex-1 flex items-center gap-4 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl shadow-inner">
+              <div className="p-2 bg-emerald-500 rounded-xl text-white shadow-lg shadow-emerald-500/40"><CheckCircle2 size={24} /></div>
+              <div className="flex flex-col">
+                <span className="text-sm font-display font-black text-emerald-400 uppercase tracking-tighter leading-none">Diagnostic Validé</span>
+                <span className="text-[10px] text-slate-400 font-medium mt-1">Tous les processus de cette phase sont identifiés.</span>
               </div>
-              <button onClick={() => setPlacedLabels({})} className="ml-auto text-[10px] font-black text-slate-600 hover:text-red-500 transition-colors uppercase tracking-[0.2em]">
+              <button onClick={() => setPlacedLabels({})} className="ml-auto text-[9px] font-black text-slate-500 hover:text-red-500 transition-colors uppercase tracking-[0.2em] cursor-pointer">
                 Recommencer
               </button>
             </motion.div>
           )}
         </div>
       </div>
+
+      {/* ── Quiz Section ─────────────────────────────────────────── */}
+      <QuizSection />
     </div>
   );
 }

@@ -26,6 +26,8 @@ export interface EventMarker {
   phase: ClimatePhase;
   targetId?: string; // For drag and drop matching
   image?: string;
+  lat?: number;
+  lng?: number;
 }
 
 export const SIMULATION_LABELS: SimulationLabel[] = [
@@ -46,7 +48,9 @@ export const WORLD_EVENTS: EventMarker[] = [
     y: 72,
     type: 'negative',
     phase: 'elnino',
-    image: '/image/inondations au perou.jpg'
+    image: '/image/floods.jpg',
+    lat: -9.19,
+    lng: -75.015
   },
   {
     id: 'drought-australia',
@@ -56,7 +60,9 @@ export const WORLD_EVENTS: EventMarker[] = [
     y: 84,
     type: 'negative',
     phase: 'elnino',
-    image: '/image/secheresse en australie.jpg'
+    image: '/image/drought.jpg',
+    lat: -25.27,
+    lng: 133.77
   },
   {
     id: 'fishing-collapse',
@@ -66,7 +72,9 @@ export const WORLD_EVENTS: EventMarker[] = [
     y: 62,
     type: 'negative',
     phase: 'elnino',
-    image: '/image/crise de la peche.jpg'
+    image: '/image/fishing.jpg',
+    lat: -15.5,
+    lng: -80.2
   },
   {
     id: 'fires-indonesia',
@@ -76,7 +84,9 @@ export const WORLD_EVENTS: EventMarker[] = [
     y: 58,
     type: 'negative',
     phase: 'elnino',
-    image: '/image/incendies en indonésie.jpg'
+    image: '/image/fires.jpg',
+    lat: -0.79,
+    lng: 113.92
   },
   {
     id: 'normal-fishing',
@@ -85,7 +95,9 @@ export const WORLD_EVENTS: EventMarker[] = [
     x: 22,
     y: 62,
     type: 'positive',
-    phase: 'normal'
+    phase: 'normal',
+    lat: -15.5,
+    lng: -80.2
   },
   {
     id: 'normal-rain-se',
@@ -94,7 +106,9 @@ export const WORLD_EVENTS: EventMarker[] = [
     x: 80,
     y: 58,
     type: 'positive',
-    phase: 'normal'
+    phase: 'normal',
+    lat: 4.21,
+    lng: 101.97
   },
   {
     id: 'normal-dry-peru',
@@ -103,6 +117,8 @@ export const WORLD_EVENTS: EventMarker[] = [
     x: 32,
     y: 72,
     type: 'neutral',
-    phase: 'normal'
+    phase: 'normal',
+    lat: -9.19,
+    lng: -75.015
   }
 ];
