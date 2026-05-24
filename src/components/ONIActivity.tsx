@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LineChart, Search, CheckCircle2, HelpCircle, Thermometer, Calendar, TrendingUp, X, Award, ChevronRight } from 'lucide-react';
 

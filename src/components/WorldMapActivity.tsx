@@ -36,7 +36,7 @@ const ELNINO_CONSEQUENCES: Consequence[] = [
     icon: '🌊',
     color: '#3b82f6', // blue
     image: '/image/inondations au perou.jpg',
-    position: [-2.0, -79.5],
+    position: [-1.0, -78.5],
     region: 'Amérique du Sud',
     elninoLink: 'Eaux côtières anormalement chaudes → forte évaporation → convection intense localisée → précipitations torrentielles.'
   },
@@ -60,7 +60,7 @@ const ELNINO_CONSEQUENCES: Consequence[] = [
     icon: '🐟',
     color: '#06b6d4', // cyan
     image: '/image/crise de la peche.jpg',
-    position: [-12.0, -78.5],
+    position: [-14.0, -83.0],
     region: 'Pacifique Sud-Est',
     elninoLink: 'Thermocline abaissée → arrêt du transport vertical d\'eau froide riche en nutriments → effondrement de la chaîne trophique marine.'
   },
@@ -99,7 +99,7 @@ const NORMAL_CONSEQUENCES: Consequence[] = [
     icon: '🐟',
     color: '#10b981', // emerald
     image: '/image/fishing.jpg',
-    position: [-12.0, -78.5],
+    position: [-14.0, -83.0],
     region: 'Pacifique Sud-Est',
     elninoLink: 'Alizés soutenus d\'Est en Ouest → transport d\'Ekman repoussant l\'eau côtière → remontée d\'eau profonde froide et nutritive → abondance de poissons.'
   },
@@ -123,24 +123,24 @@ const NORMAL_CONSEQUENCES: Consequence[] = [
     icon: '🌵',
     color: '#6b7280', // gray
     image: '/image/drought.jpg',
-    position: [-2.0, -79.5],
+    position: [-1.0, -78.5],
     region: 'Amérique du Sud',
     elninoLink: 'Eau de surface froide → refroidissement de l\'air inférieur → inversion thermique → stabilité verticale → absence totale de précipitations.'
   }
 ];
 
 const ELNINO_STARTS: Record<string, [number, number]> = {
-  floods: [5, -115],
-  drought: [5, -130],
-  fishing: [5, -145],
-  fires: [5, -160],
-  teleconnections: [5, -175]
+  floods: [15, -120],
+  drought: [-18, -135],
+  fishing: [-5, -110],
+  fires: [-10, -155],
+  teleconnections: [15, -165]
 };
 
 const NORMAL_STARTS: Record<string, [number, number]> = {
-  'normal-fishing': [5, -120],
-  'normal-rain': [5, -145],
-  'normal-dry': [5, -170]
+  'normal-fishing': [-10, -120],
+  'normal-rain': [10, -145],
+  'normal-dry': [-5, -165]
 };
 
 function createCustomIcon(emoji: string, color: string, selected: boolean, isPlaced: boolean) {
@@ -230,8 +230,8 @@ export default function WorldMapActivity({ phase }: { phase: ClimatePhase; isTea
     const latDiff = Math.abs(latlng.lat - target.position[0]);
     const lngDiff = Math.abs(latlng.lng - target.position[1]);
 
-    // If within ~8.5 degrees, snap it to the correct coordinate!
-    if (latDiff < 8.5 && lngDiff < 8.5) {
+    // If within ~6.0 degrees, snap it to the correct coordinate!
+    if (latDiff < 6.0 && lngDiff < 6.0) {
       setMarkerPositions(prev => ({ ...prev, [id]: target.position }));
       setCorrectPlaced(prev => ({ ...prev, [id]: true }));
       setSelectedId(id);
@@ -292,7 +292,7 @@ export default function WorldMapActivity({ phase }: { phase: ClimatePhase; isTea
             <Circle
               key={`target-${c.id}`}
               center={c.position}
-              radius={800000} // ~800km Target Radius
+              radius={500000} // ~500km Target Radius
               pathOptions={{
                 color: c.color,
                 dashArray: '6, 8',
