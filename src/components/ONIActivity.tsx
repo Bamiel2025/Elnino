@@ -51,10 +51,10 @@ const quizQuestions: QuizQuestion[] = [
     id: 'q4',
     question: "En analysant le graphique interactif, quel épisode détient le record absolu d'anomalie chaude enregistré ?",
     options: [
-      "Le Super El Niño de 1982-1983 (+2.2 °C)",
-      "Le Super El Niño de 1997-1998 (+2.4 °C)",
-      "Le Super El Niño de 2015-2016 (+2.6 °C)",
-      "La prévision pour 2026 (+2.2 °C)"
+      "Le Super El Niño de 1982-1983",
+      "Le Super El Niño de 1997-1998",
+      "Le Super El Niño de 2015-2016",
+      "La prévision pour 2026"
     ],
     correctAnswer: 2,
     explanation: "Avec un pic exceptionnel mesuré à +2.6 °C au plus fort de l'hiver 2015-2016, cet épisode reste à ce jour le plus intense de l'ère instrumentale moderne."
