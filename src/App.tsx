@@ -147,7 +147,7 @@ export default function App() {
             
             {currentStage === 'simulation' && (
               <div className="flex flex-col gap-8">
-                <PacificView phase={phase} intensity={intensity} isTeacherMode={isTeacherMode} />
+                <PacificView phase={phase} intensity={intensity} isTeacherMode={isTeacherMode} onPhaseChange={handlePhaseChange} />
                 <div className="flex justify-end">
                   <button 
                     onClick={() => setCurrentStage('map')}
@@ -162,6 +162,32 @@ export default function App() {
 
             {currentStage === 'map' && (
                <div className="flex flex-col gap-8">
+                  {/* High-End Phase Selector for Map stage */}
+                  <div className="flex justify-center mt-2">
+                    <div className="flex bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl border border-slate-800 gap-2 shadow-2xl">
+                      <button
+                        onClick={() => handlePhaseChange('normal')}
+                        className={`px-6 py-3 rounded-xl font-display font-black text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                          phase === 'normal'
+                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        🌊 Conditions Normales
+                      </button>
+                      <button
+                        onClick={() => handlePhaseChange('elnino')}
+                        className={`px-6 py-3 rounded-xl font-display font-black text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                          phase === 'elnino'
+                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        🔥 Phénomène El Niño
+                      </button>
+                    </div>
+                  </div>
+
                   <WorldMapActivity phase={phase} isTeacherMode={isTeacherMode} />
                   <div className="flex justify-end mt-4">
                      <button 

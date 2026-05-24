@@ -14,13 +14,14 @@ interface PacificViewProps {
   phase: ClimatePhase;
   intensity: number;
   isTeacherMode?: boolean;
+  onPhaseChange?: (phase: ClimatePhase) => void;
 }
 
 function getModeFromPhase(phase: ClimatePhase): ClimateMode {
   return phase === 'elnino' ? 'elnino' : 'normal';
 }
 
-export default function PacificView({ phase, intensity, isTeacherMode }: PacificViewProps) {
+export default function PacificView({ phase, intensity, isTeacherMode, onPhaseChange }: PacificViewProps) {
   const [placedLabels, setPlacedLabels] = useState<Record<string, string>>({});
   const [showRefImage, setShowRefImage] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,6 +65,9 @@ export default function PacificView({ phase, intensity, isTeacherMode }: Pacific
     const current = MODES.find(m => m.id === activeId) ?? null;
     setPrevMode(current);
     setActiveId(id);
+    if (onPhaseChange) {
+      onPhaseChange(id === 'elnino' ? 'elnino' : 'normal');
+    }
   };
 
   const activeMode = MODES.find(m => m.id === activeId)!;
